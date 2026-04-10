@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 import com.ramesh.leavemanagement.model.LeaveRequest;
@@ -16,8 +15,8 @@ public class LeaveService {
     @Autowired
     private LeaveRepository leaveRepository;
 
-    // ✅ APPLY LEAVE WITH AUTO REJECT LOGIC
-    public void applyLeave(LeaveRequest leave) {
+    // ✅ APPLY LEAVE (FINAL SIMPLE LOGIC)
+    public LeaveRequest applyLeave(LeaveRequest leave) {
 
         // ✅ VALIDATIONS
         if (leave.getEmployeeName() == null || leave.getEmployeeName().isEmpty()) {
@@ -43,66 +42,22 @@ public class LeaveService {
             throw new RuntimeException("End date cannot be before start date");
         }
 
-        int currentMonth = start.getMonthValue();
-        int currentYear = start.getYear();
-
-        // ✅ GET USER LEAVES
-        List<LeaveRequest> userLeaves =
-                leaveRepository.findByEmployeeEmail(leave.getEmployeeEmail());
-
-        // 🔥 IMPORTANT: SORT BY DATE (VERY IMPORTANT FIX)
-        userLeaves.sort(Comparator.comparing(l -> LocalDate.parse(l.getStartDate())));
-
-        // ✅ CALCULATE EXISTING DAYS
-        long totalDays = userLeaves.stream()
-                .filter(l -> {
-                    LocalDate d = LocalDate.parse(l.getStartDate());
-                    return d.getMonthValue() == currentMonth &&
-                           d.getYear() == currentYear;
-                })
-                .mapToLong(l -> {
-                    LocalDate s = LocalDate.parse(l.getStartDate());
-                    LocalDate e = LocalDate.parse(l.getEndDate());
-                    return java.time.temporal.ChronoUnit.DAYS.between(s, e) + 1;
-                })
-                .sum();
-
-        long newLeaveDays =
-                java.time.temporal.ChronoUnit.DAYS.between(start, end) + 1;
+        // ✅ CORRECT DAY CALCULATION (RETURN DATE LOGIC)
+        long newLeaveDays = java.time.temporal.ChronoUnit.DAYS.between(start, end);
+        if (newLeaveDays == 0) newLeaveDays = 1;
 
         long allowedDays = 3;
 
-        // 🔥 STEP 1: AUTO REJECT OLD EXTRA PENDING LEAVES
-        long runningDays = 0;
-
-        for (LeaveRequest l : userLeaves) {
-
-            LocalDate s = LocalDate.parse(l.getStartDate());
-            LocalDate e = LocalDate.parse(l.getEndDate());
-
-            if (s.getMonthValue() == currentMonth && s.getYear() == currentYear) {
-
-                long days = java.time.temporal.ChronoUnit.DAYS.between(s, e) + 1;
-
-                runningDays += days;
-
-                if (runningDays > allowedDays && "PENDING".equals(l.getStatus())) {
-                    l.setStatus("REJECTED");
-                    leaveRepository.save(l);
-                }
-            }
-        }
-
-        // 🔥 STEP 2: HANDLE NEW LEAVE
+        // ✅ FINAL LOGIC (ONLY CURRENT REQUEST)
         leave.setCreatedAt(LocalDate.now().toString());
 
-        if (totalDays + newLeaveDays > allowedDays) {
+        if (newLeaveDays > allowedDays) {
             leave.setStatus("REJECTED");
         } else {
             leave.setStatus("PENDING");
         }
 
-        leaveRepository.save(leave);
+        return leaveRepository.save(leave);
     }
 
     // ✅ GET EMPLOYEE LEAVES
@@ -110,7 +65,7 @@ public class LeaveService {
         return leaveRepository.findByEmployeeEmail(email);
     }
 
-    // ✅ GET ALL LEAVES (FOR ADMIN)
+    // ✅ GET ALL LEAVES
     public List<LeaveRequest> getAllLeaves() {
         return leaveRepository.findAll();
     }

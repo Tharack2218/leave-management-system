@@ -32,20 +32,32 @@ function EmployeeDashboard() {
         const leavesData = Array.isArray(data) ? data : [];
         setLeaves(leavesData);
 
-        let totalDays = 0;
+        const now = new Date();
 
-        leavesData.forEach(l => {
-          const start = new Date(l.startDate);
-          const end = new Date(l.endDate);
-          totalDays += (end - start) / (1000 * 60 * 60 * 24) + 1;
-        });
+        // ✅ FIX: calculate only valid leaves (ignore REJECTED)
+        const approvedLeaves = leavesData
+          .filter(l => {
+            const d = new Date(l.startDate);
+            return (
+              l.status !== "REJECTED" &&
+              d.getMonth() === now.getMonth() &&
+              d.getFullYear() === now.getFullYear()
+            );
+          })
+          .reduce((total, l) => {
+            const start = new Date(l.startDate);
+            const end = new Date(l.endDate);
+            const days =
+              (end - start) / (1000 * 60 * 60 * 24) + 1;
+            return total + days;
+          }, 0);
 
-        setLeaveLimitReached(totalDays >= 3);
+        // ✅ FIXED HERE
+        setLeaveLimitReached(approvedLeaves >= 3);
       })
       .catch(err => console.error(err));
   }, [storedUser]);
 
-  // ✅ FIXED HERE
   useEffect(() => {
     fetchLeaves();
   }, [fetchLeaves]);
@@ -123,7 +135,7 @@ function EmployeeDashboard() {
 
         {leaveLimitReached && (
           <p className="warning">
-            ⚠️ You reached 3 leave days this month. Meet admin.
+            ⚠️ You reached 2 leave days this month. Meet admin.
           </p>
         )}
 
