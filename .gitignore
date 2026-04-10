@@ -1,0 +1,11 @@
+# Ignore videos
+WEBSITE IMAGES/*.mp4
+
+# React
+Frontend/leave-frontend/node_modules/
+
+# Spring Boot
+Backend/**/target/
+
+# Eclipse
+Backend/.metadata/

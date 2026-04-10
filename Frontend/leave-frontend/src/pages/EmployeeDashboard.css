@@ -1,0 +1,102 @@
+.employee-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eef2f7;
+}
+
+.employee-card {
+  width: 550px;
+  padding: 25px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoutBtn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.welcome {
+  margin: 10px 0 15px;
+  color: #555;
+}
+
+.warning {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.textarea {
+  height: 80px;
+}
+
+.applyBtn {
+  width: 100%;
+  padding: 10px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.applyBtn:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+table {
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+
+th {
+  background: #343a40;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* STATUS COLORS */
+.approved {
+  color: green;
+  font-weight: bold;
+}
+
+.rejected {
+  color: red;
+  font-weight: bold;
+}
+
+.pending {
+  color: orange;
+  font-weight: bold;
+}

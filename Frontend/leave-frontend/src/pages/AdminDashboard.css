@@ -1,0 +1,165 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #eef2f7;
+}
+
+/* MAIN CONTAINER */
+.container {
+  padding: 30px;
+}
+
+/* HEADER */
+.header {
+  background: #ffffff;
+  padding: 18px 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* LOGOUT BUTTON */
+.logoutBtn {
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background: #c82333;
+}
+
+/* DASHBOARD LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* DESKTOP RESPONSIVE */
+@media (min-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .countCard {
+    grid-column: span 2;
+  }
+
+  .leaveCard {
+    grid-column: span 2;
+  }
+}
+
+/* COUNT CARD */
+.countCard {
+  background: linear-gradient(135deg, #007bff, #0047ab);
+  color: white;
+  text-align: center;
+  padding: 30px;
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+.countCard h1 {
+  font-size: 40px;
+  margin-top: 10px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th {
+  background: #2c3e50;
+  color: white;
+  padding: 10px;
+  font-weight: 500;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+/* BUTTONS */
+.approveBtn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.approveBtn:hover {
+  background: #218838;
+}
+
+.rejectBtn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.rejectBtn:hover {
+  background: #c82333;
+}
+
+/* STATUS */
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* NO ACTION */
+.noAction {
+  color: #888;
+  font-weight: 500;
+}
